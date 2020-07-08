@@ -3,7 +3,7 @@
 #include <tee_internal_api.h>
 #include <tee_internal_api_extensions.h>
 
-#include "hello_world_ta.h"
+#include "ta_hello_world.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

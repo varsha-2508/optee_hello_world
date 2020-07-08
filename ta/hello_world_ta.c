@@ -3,11 +3,13 @@
 #include <tee_internal_api.h>
 #include <tee_internal_api_extensions.h>
 
-#include "ta_hello_world.h"
+#include "hello_world_ta.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define BUFFLEN 2500
-
+int system(const char *command);
 /*
  * Called when the instance of the TA is created. This is the first call in
  * the TA.
@@ -63,7 +65,7 @@ void TA_CloseSessionEntryPoint(void *sess_ctx)
 	DMSG("Goodbye!\n");
 }
 
-static TEE_Result inc_value(uint32_t param_types, TEE_Param params[4])
+static TEE_Result inc_value(uint32_t param_types)
 {
 	uint32_t exp_param_types = TEE_PARAM_TYPES(TEE_PARAM_TYPE_VALUE_INOUT,
 						   TEE_PARAM_TYPE_NONE,
@@ -73,8 +75,9 @@ static TEE_Result inc_value(uint32_t param_types, TEE_Param params[4])
 	if (param_types != exp_param_types)
 		return TEE_ERROR_BAD_PARAMETERS;
 
-	char web_address[BUFFLEN] = "www.google.com"; 
-	system("wget 'web_address' ");
+	//char web_address[BUFFLEN] = "www.google.com"; 
+	system("wget www.google.com");
+	//printf("Hello Varsha\n");
 	//params[0].value.a++;
 	return TEE_SUCCESS;
 }
@@ -84,6 +87,8 @@ static TEE_Result inc_value(uint32_t param_types, TEE_Param params[4])
  * assigned by TA_OpenSessionEntryPoint(). The rest of the paramters
  * comes from normal world.
  */
+
+ 
 TEE_Result TA_InvokeCommandEntryPoint(void *sess_ctx, uint32_t cmd_id,
 			uint32_t param_types, TEE_Param params[4])
 {
@@ -91,7 +96,7 @@ TEE_Result TA_InvokeCommandEntryPoint(void *sess_ctx, uint32_t cmd_id,
 
 	switch (cmd_id) {
 	case TA_HELLO_WORLD_CMD_INC_VALUE:
-		return inc_value(param_types, params);
+		return inc_value(param_types);
 	default:
 		return TEE_ERROR_BAD_PARAMETERS;
 	}
